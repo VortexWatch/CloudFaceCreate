@@ -196,6 +196,8 @@ When documenting a device or format detail, please include where the information
 
 WatchDialEdit is an independent project and is not affiliated with or endorsed by Shenzhen DO Intelligent Technology Co., Ltd. (idoosmart) or any smartwatch manufacturer.
 
+The weather, ring, or progressbar widgets may render incorrectly.
+
 This is CloudFaceCreate, but we decided to rename it to WatchDialEdit.
 
 ## License
