@@ -1,5 +1,9 @@
 # WatchDialEdit (CloudFaceCreate)
 
+<img width="1402" height="932" alt="idw13_screenshot" src="https://github.com/user-attachments/assets/c8cf2a79-c97a-4c54-947a-e20d0866504d" />
+
+<img width="1402" height="932" alt="idw20_screenshot" src="https://github.com/user-attachments/assets/ecdf841f-a5fe-4fc3-b80c-95511ae74024" />
+
 An open-source watch face editor for IDO / VeryFit **IWF** watch face files that makes watch face development accessible for everyone.
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/) [![PyQt6](https://img.shields.io/badge/UI-PyQt6-41cd52)](https://pypi.org/project/PyQt6/) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-gray.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -191,6 +195,8 @@ When documenting a device or format detail, please include where the information
 ## Disclaimer
 
 WatchDialEdit is an independent project and is not affiliated with or endorsed by Shenzhen DO Intelligent Technology Co., Ltd. (idoosmart) or any smartwatch manufacturer.
+
+This is CloudFaceCreate, but we decided to rename it to WatchDialEdit.
 
 ## License
 GNU General Public License V3.0
