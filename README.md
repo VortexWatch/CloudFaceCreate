@@ -2,8 +2,6 @@
 
 An open-source watch face editor for IDO / VeryFit **IWF** watch face files that makes watch face development accessible for everyone.
 
-WatchDialEdit lets you open an extracted watch face folder, edit its widgets and properties, preview the result, and export it back to an `.iwf` file.
-
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/) [![PyQt6](https://img.shields.io/badge/UI-PyQt6-41cd52)](https://pypi.org/project/PyQt6/) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-gray.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Features
