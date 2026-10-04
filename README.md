@@ -1,6 +1,6 @@
-# WatchDialEdit
+# WatchDialEdit (CloudFaceCreate)
 
-An open-source watch face editor for IDO / VeryFit **IWF** watch face files.
+An open-source watch face editor for IDO / VeryFit **IWF** watch face files that makes watch face development accessible for everyone.
 
 WatchDialEdit lets you open an extracted watch face folder, edit its widgets and properties, preview the result, and export it back to an `.iwf` file.
 
@@ -136,7 +136,7 @@ WatchDialEdit/
 │   │   ├── asset_picker_dialog.py
 │   │   └── main_window.py
 │   └── app.py
-│
+├── main.py
 ├── iwf_template/
 ├── requirements.txt
 ├── LICENSE
@@ -193,8 +193,6 @@ When documenting a device or format detail, please include where the information
 ## Disclaimer
 
 WatchDialEdit is an independent project and is not affiliated with or endorsed by Shenzhen DO Intelligent Technology Co., Ltd. (idoosmart) or any smartwatch manufacturer.
-
-The project is intended for interoperability, research, and working with watch face files that the user already has access to.
 
 ## License
 GNU General Public License V3.0
