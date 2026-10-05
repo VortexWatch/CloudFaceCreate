@@ -7,7 +7,7 @@ from .ui.main_window import MainWindow
 def main(argv=None):
     argv = list(sys.argv if argv is None else argv)
     app = QApplication(argv)
-    app.setApplicationName("WatchDialEdit")
+    app.setApplicationName("CloudFaceCreate")
     app.setStyle("Fusion")
     win = MainWindow()
     if len(argv) > 1:
