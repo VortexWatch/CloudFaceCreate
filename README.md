@@ -46,8 +46,8 @@ Device information is only added when it has been confirmed from a real watch fa
 Clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/VortexWatch/WatchDialEdit.git
-cd WatchDialEdit
+git clone https://github.com/VortexWatch/CloudFaceCreate.git
+cd CloudFaceCreate
 pip install -r requirements.txt
 ```
 
