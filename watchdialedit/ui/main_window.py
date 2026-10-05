@@ -21,12 +21,12 @@ _FACTORY_BY_KEY = {key: factory for entries in WIDGET_CATEGORIES.values()
 class MainWindow(QMainWindow):
     def __init__(self, project: Project = None):
         super().__init__()
-        self.setWindowTitle("WatchDialEdit")
+        self.setWindowTitle("CloudFaceCreate")
         self.resize(1400, 900)
         self.model = None
         self._build_actions()
         self._build_menus()
-        self.statusBar().showMessage("Open a Watch Face Project (File > Open) to begin")
+        self.statusBar().showMessage("Open an IWF design folder (File > Open) to begin")
         if project:
             self.set_project(project)
 
@@ -62,7 +62,7 @@ class MainWindow(QMainWindow):
         if not self.model:
             return
         p = self.model.project
-        self.setWindowTitle("WatchDialEdit - %s%s  [%s]" % (
+        self.setWindowTitle("CloudFaceCreate - %s%s  [%s]" % (
             p.iwf.get("name", ""), " *" if p.dirty else "", p.root))
         unsupported = self.model.render().unsupported
         self.statusBar().showMessage(
