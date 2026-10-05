@@ -1,8 +1,8 @@
 import copy
 import os
 from collections import OrderedDict
-from PyQt6.QtCore import Qt, QTimer
-from PyQt6.QtGui import QAction, QKeySequence, QActionGroup
+from PyQt6.QtCore import Qt, QTimer, QRectF, QRect
+from PyQt6.QtGui import QAction, QKeySequence, QActionGroup, QColor, QImage, QPainter, QPen
 from PyQt6.QtWidgets import (QMainWindow, QFileDialog, QMessageBox, QDockWidget, QWidget, QGridLayout,
                              QToolBar, QComboBox, QLabel, QInputDialog, QSpinBox, QTabWidget, QApplication)
 from ..core.project import Project
@@ -26,7 +26,7 @@ class MainWindow(QMainWindow):
         self.model = None
         self._build_actions()
         self._build_menus()
-        self.statusBar().showMessage("Open an IWF design folder (File > Open) to begin")
+        self.statusBar().showMessage("Open a Watch Face Project (File > Open) to begin")
         if project:
             self.set_project(project)
 
@@ -220,10 +220,292 @@ class MainWindow(QMainWindow):
     def export_png(self):
         if not self.model:
             return
-        path, _ = QFileDialog.getSaveFileName(self, "Export preview PNG", "preview.png", "PNG Files (*.png)")
-        if path:
-            self.model.render().image.save(path)      # core render only: no overlays exist here
-
+    
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export preview PNG",
+            "preview.png",
+            "PNG Files (*.png)"
+        )
+    
+        if not path:
+            return
+    
+        try:
+            # ------------------------------------------------------------------
+            # Device preview profiles
+            #
+            # canvasWidth / canvasHeight = actual watch-face canvas dimensions
+            # previewWidth / previewHeight = exported preview dimensions
+            # ------------------------------------------------------------------
+            DEVICE_PROFILES = {
+                "IDW13": {
+                    "canvasWidth": 240,
+                    "canvasHeight": 284,
+                    "previewWidth": 174,
+                    "previewHeight": 196,
+                    "previewBorderRadius": 31,
+                    "previewBorderWidth": 2,
+                    "previewBorderRectWidth": 168,
+                    "previewBorderRectHeight": 194,
+                    "previewScale": 1.0,
+                    "borderColor": QColor(37, 37, 37, 255),
+                },
+    
+                "IDW18": {
+                    "canvasWidth": 240,
+                    "canvasHeight": 240,
+                    "previewWidth": 180,
+                    "previewHeight": 180,
+                    "previewBorderRadius": 84,
+                    "previewBorderWidth": 2,
+                    "previewBorderRectWidth": 169,
+                    "previewBorderRectHeight": 169,
+                    "previewScale": 0.94,
+                    "borderColor": QColor(123, 123, 123, 255),
+                },
+    
+                "IDW20": {
+                    "canvasWidth": 320,
+                    "canvasHeight": 385,
+                    "previewWidth": 272,
+                    "previewHeight": 324,
+                    "previewBorderRadius": 67,
+                    "previewBorderWidth": 3,
+                    "previewBorderRectWidth": 269,
+                    "previewBorderRectHeight": 321,
+                    "previewScale": 0.95,
+                    "borderColor": QColor(128, 128, 128, 255),
+                },
+            }
+    
+            device_id = self.model.project.iwf.device_id
+    
+            if device_id not in DEVICE_PROFILES:
+                QMessageBox.warning(
+                    self,
+                    "Unsupported Device",
+                    f"Preview generation is not supported for {device_id}."
+                )
+                return
+    
+            profile = DEVICE_PROFILES[device_id]
+    
+            # ------------------------------------------------------------------
+            # Extract profile values
+            # ------------------------------------------------------------------
+            canvasW = profile["canvasWidth"]
+            canvasH = profile["canvasHeight"]
+    
+            outW = profile["previewWidth"]
+            outH = profile["previewHeight"]
+    
+            cornerRadius = profile["previewBorderRadius"]
+            previewBorderWidth = profile["previewBorderWidth"]
+    
+            borderRectW = profile.get(
+                "previewBorderRectWidth",
+                outW - 4
+            )
+    
+            borderRectH = profile.get(
+                "previewBorderRectHeight",
+                outH - 4
+            )
+    
+            previewScale = profile["previewScale"]
+            borderColor = profile["borderColor"]
+    
+            # ------------------------------------------------------------------
+            # Calculate border position
+            #
+            # This matches the original TypeScript implementation:
+            #
+            # offsetX = (outW - borderRectW) / 2
+            # offsetY = (outH - borderRectH) / 2
+            # ------------------------------------------------------------------
+            offsetX = (outW - borderRectW) / 2.0
+            offsetY = (outH - borderRectH) / 2.0
+    
+            # ------------------------------------------------------------------
+            # Render the actual watch canvas
+            #
+            # IMPORTANT:
+            # Do NOT use QGraphicsScene.sceneRect() for canvas dimensions.
+            # The scene can be larger than the actual watch-face canvas.
+            #
+            # The TypeScript implementation renders exactly canvasW x canvasH.
+            # ------------------------------------------------------------------
+            old_overlays = self.model.show_overlays
+    
+            try:
+                self.model.show_overlays = False
+                self.model.editorStateChanged.emit()
+    
+                scene_image = QImage(
+                    canvasW,
+                    canvasH,
+                    QImage.Format.Format_ARGB32
+                )
+    
+                scene_image.fill(Qt.GlobalColor.transparent)
+    
+                scene_painter = QPainter(scene_image)
+    
+                scene_painter.setRenderHint(
+                    QPainter.RenderHint.Antialiasing,
+                    True
+                )
+    
+                scene_painter.setRenderHint(
+                    QPainter.RenderHint.SmoothPixmapTransform,
+                    True
+                )
+    
+                # The actual watch-face coordinate space.
+                source_rect = QRectF(
+                    0,
+                    0,
+                    canvasW,
+                    canvasH
+                )
+    
+                target_rect = QRectF(
+                    0,
+                    0,
+                    canvasW,
+                    canvasH
+                )
+    
+                self.view.scene().render(
+                    scene_painter,
+                    target_rect,
+                    source_rect
+                )
+    
+                scene_painter.end()
+    
+            finally:
+                # Always restore the editor overlay state, even if rendering
+                # throws an exception.
+                self.model.show_overlays = old_overlays
+                self.model.editorStateChanged.emit()
+    
+            # ------------------------------------------------------------------
+            # Calculate the same scale as the original TypeScript version
+            #
+            # fitScale =
+            #     min(outW / canvasW, outH / canvasH) * previewScale
+            # ------------------------------------------------------------------
+            fitScale = (
+                min(
+                    outW / canvasW,
+                    outH / canvasH
+                )
+                * previewScale
+            )
+    
+            scaledW = round(canvasW * fitScale)
+            scaledH = round(canvasH * fitScale)
+    
+            # ------------------------------------------------------------------
+            # Create final preview image
+            # ------------------------------------------------------------------
+            out_image = QImage(
+                outW,
+                outH,
+                QImage.Format.Format_ARGB32
+            )
+    
+            # Match the TypeScript implementation:
+            # ctx.fillStyle = "#000000";
+            # ctx.fillRect(...)
+            out_image.fill(QColor(0, 0, 0, 255))
+    
+            painter = QPainter(out_image)
+    
+            painter.setRenderHint(
+                QPainter.RenderHint.Antialiasing,
+                True
+            )
+    
+            painter.setRenderHint(
+                QPainter.RenderHint.SmoothPixmapTransform,
+                True
+            )
+    
+            # ------------------------------------------------------------------
+            # Center the scaled watch-face canvas
+            #
+            # Equivalent to:
+            #
+            # const offX = Math.floor((outW - scaledW) / 2);
+            # const offY = Math.floor((outH - scaledH) / 2);
+            # ------------------------------------------------------------------
+            offX = int((outW - scaledW) // 2)
+            offY = int((outH - scaledH) // 2)
+    
+            target_scaled_rect = QRect(
+                offX,
+                offY,
+                scaledW,
+                scaledH
+            )
+    
+            painter.drawImage(
+                target_scaled_rect,
+                scene_image
+            )
+    
+            # ------------------------------------------------------------------
+            # Draw preview border on top
+            #
+            # This corresponds to:
+            #
+            # ctx.strokeStyle = previewBorderColor;
+            # ctx.lineWidth = previewBorderWidth;
+            # strokeRoundedRect(...)
+            # ------------------------------------------------------------------
+            pen = QPen(borderColor)
+            pen.setWidth(previewBorderWidth)
+    
+            painter.setPen(pen)
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+    
+            border_rect = QRectF(
+                offsetX,
+                offsetY,
+                borderRectW,
+                borderRectH
+            )
+    
+            painter.drawRoundedRect(
+                border_rect,
+                cornerRadius,
+                cornerRadius
+            )
+    
+            painter.end()
+    
+            # ------------------------------------------------------------------
+            # Save PNG
+            # ------------------------------------------------------------------
+            if not out_image.save(path, "PNG"):
+                raise RuntimeError(
+                    f"Failed to save PNG to {path}"
+                )
+    
+            self.statusBar().showMessage(
+                f"Wrote {path}"
+            )
+    
+        except Exception as ex:
+            QMessageBox.critical(
+                self,
+                "Export failed",
+                str(ex)
+            )
+                
     def add_widget(self):
         if not self.model:
             return
