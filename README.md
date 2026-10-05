@@ -197,7 +197,5 @@ WatchDialEdit is an independent project and is not affiliated with or endorsed b
 
 The weather, ring, or progressbar widgets may render incorrectly.
 
-This is CloudFaceCreate, but we decided to rename it to WatchDialEdit.
-
 ## License
 GNU General Public License V3.0
