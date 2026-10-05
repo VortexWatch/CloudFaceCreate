@@ -31,6 +31,7 @@ An open-source watch face editor for IDO / VeryFit **IWF** watch face files that
 | Device        | Resolution | Hand anchor | Status        |
 | ------------- | ---------: | ----------: | ------------- |
 | IDW13         |    240×284 |  (120, 142) | Verified      |
+| IDW18         |    240×240 |  (120, 120) | Verified      |
 | IDW20         |    320×385 |  (160, 193) | Verified      |
 | Other devices |          — |           — | Not confirmed |
 
