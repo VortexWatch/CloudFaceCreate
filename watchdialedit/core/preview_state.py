@@ -1,8 +1,3 @@
-"""Editor-only preview inputs (NOT part of iwf.json).
-
-In the JS these are the per-widget `config.yl` fields. Time 10:08:36 is the value the
-project owner verified for the IDW13 reference; the JS itself has no fixed time (it uses
-`config.yl` or the wall clock). Other sample values are arbitrary editor defaults."""
 import datetime
 from dataclasses import dataclass, field
 from typing import Dict
@@ -16,6 +11,9 @@ class PreviewState:
     year: int = 2026
     month: int = 9
     day: int = 23           # a Wednesday; JS default week index is 3 (Wed)
+    bluetooth_connected: bool = True       # processDialStatus "bluetooth"
+    redpoint_shown: bool = False           # processDialStatus "redpoint"
+    daytime: bool = True                   # sunswitch frame select
     anima_frame: int = 0
     values: Dict[str, float] = field(default_factory=lambda: {
         "heartrate": 72, "calorie": 380, "distance": 6.08, "step": 6800,
