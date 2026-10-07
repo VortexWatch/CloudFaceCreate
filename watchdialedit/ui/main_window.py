@@ -251,6 +251,19 @@ class MainWindow(QMainWindow):
                     "previewScale": 1.0,
                     "borderColor": QColor(37, 37, 37, 255),
                 },
+                
+                "IDW17": {
+                    "canvasWidth": 240,
+                    "canvasHeight": 296,
+                    "previewWidth": 174,
+                    "previewHeight": 196,
+                    "previewBorderRadius": 38,
+                    "previewBorderWidth": 2,
+                    "previewBorderRectWidth": 156,
+                    "previewBorderRectHeight": 192,
+                    "previewScale": 0.97,
+                    "borderColor": QColor(37, 37, 37, 255),
+                },
     
                 "IDW18": {
                     "canvasWidth": 240,
@@ -275,6 +288,19 @@ class MainWindow(QMainWindow):
                     "previewBorderRectWidth": 269,
                     "previewBorderRectHeight": 321,
                     "previewScale": 0.95,
+                    "borderColor": QColor(128, 128, 128, 255),
+                },
+                
+                "ID Sport03": {
+                    "canvasWidth": 240,
+                    "canvasHeight": 296,
+                    "previewWidth": 196,
+                    "previewHeight": 238,
+                    "previewBorderRadius": 50,
+                    "previewBorderWidth": 2,
+                    "previewBorderRectWidth": 190,
+                    "previewBorderRectHeight": 232,
+                    "previewScale": 0.93,
                     "borderColor": QColor(128, 128, 128, 255),
                 },
             }
