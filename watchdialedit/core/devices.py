@@ -21,12 +21,14 @@ class Device:
 
 VERIFIED_DEVICES = {
     "IDW13": Device("IDW13", 240, 284, "fixture w552", 120, 142),
+    "IDW17": Device("IDW17", 240, 296, "verified from web", 120, 148),
     "IDW18": Device("IDW18", 240, 240, "requested from users", 120, 120),
     "IDW20": Device("IDW20", 320, 385, "user-provided", 160, 193),
+    "ID Sport03": Device("ID Sport03", 240, 296, "got from an ID Sport03 watch face file", 120, 148),
 }
 
 # Deliberately no guesses; these need a real fixture / source table.
-UNKNOWN_DEVICES = ["IDW16", "IDW17", "IDW26", "GTX03", "GTX10", "GTX13"]
+UNKNOWN_DEVICES = ["IDW16", "IDW26", "GTX03", "GTX10", "GTX13"]
 
 
 def get_device(device_id: str) -> Optional[Device]:
