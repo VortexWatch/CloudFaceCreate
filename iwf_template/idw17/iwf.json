@@ -1,0 +1,15 @@
+{
+    "version": 1,
+    "clouddialversion": 3,
+    "preview": "preview.png",
+    "name": "untitled",
+    "author": "you",
+    "description": "IDW17",
+    "deviceId": "IDW17",
+    "bluetooth": false,
+    "disturb": false,
+    "battery": false,
+    "compress": "LZ4",
+    "item": [],
+    "bkground": "bg.png"
+}
