@@ -29,8 +29,10 @@ CloudFaceCreate is an open-source watch face editor for IDO/VeryFit (Including t
 | Device        | Resolution | Hand anchor | Status        |
 | ------------- | ---------: | ----------: | ------------- |
 | IDW13         |    240×284 |  (120, 142) | Verified      |
+| IDW17         |    240×296 |  (120, 148) | Verified      |
 | IDW18         |    240×240 |  (120, 120) | Verified      |
 | IDW20         |    320×385 |  (160, 193) | Verified      |
+| ID Sport03         |    240×296 |  (120, 148) | Verified      |
 | Other devices |          — |           — | Not confirmed |
 
 Device information is only added when it has been confirmed from a real watch face package, device information, or another reliable source. Unknown devices are not given guessed resolutions or preview dimensions.
